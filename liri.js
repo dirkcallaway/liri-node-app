@@ -35,17 +35,17 @@ inquirer.prompt([
         var bandQuery = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
         axios.get(bandQuery).then(
           function (response) {
-            if(response.data.length > 0){
-            console.log("\n" + artistFullName + " are playing the following shows:");
-            for (var i = 0; i < response.data.length; i++) {
-              console.log("---------------------------------");
-              console.log("Venue Name: " + response.data[i].venue.name);
-              console.log("Venue Location: " + response.data[0].venue.city + ", " + (response.data[0].venue.region));
-              console.log("Event Date: " + response.data[0].datetime);
+            if (response.data.length > 0) {
+              console.log("\n" + artistFullName + " are playing the following shows:");
+              for (var i = 0; i < response.data.length; i++) {
+                console.log("---------------------------------");
+                console.log("Venue Name: " + response.data[i].venue.name);
+                console.log("Venue Location: " + response.data[0].venue.city + ", " + (response.data[0].venue.region));
+                console.log("Event Date: " + response.data[0].datetime);
+              }
+            } else {
+              console.log("\n" + artistFullName + " have no shows scheduled.");
             }
-          }else {
-            console.log("\n" + artistFullName + " have no shows scheduled.");
-          }
           }
         );
       });
@@ -53,8 +53,45 @@ inquirer.prompt([
     case "What song is this?":
       text = "Song...";
       break;
+    //Movie Search
     case "Find a movie.":
-      text = "Movie...";
+      inquirer.prompt([
+
+        {
+          type: "input",
+          name: "movie",
+          message: "What movie are you searching for?"
+        }
+
+      ]).then(function (movie) {
+        console.log(movie);
+        if(movie.movie == ""){
+          var movieTitle = "Mr.+Nobody";
+        } else {
+        movieFullName = movie.movie;
+        var movieName = movieFullName.split(" ");
+        var movieTitle = movieName.join("+");
+        }
+
+        var movieQuery = "http://www.omdbapi.com/?t=" + movieTitle + "&y=&plot=short&apikey=trilogy";
+        console.log(movieQuery);
+        axios.get(movieQuery).then(
+          function (response) {
+            console.log(response.data);
+            // if (response.data.length > 0) {
+            //   console.log("\n" + artistFullName + " are playing the following shows:");
+            //   for (var i = 0; i < response.data.length; i++) {
+            //     console.log("---------------------------------");
+            //     console.log("Venue Name: " + response.data[i].venue.name);
+            //     console.log("Venue Location: " + response.data[0].venue.city + ", " + (response.data[0].venue.region));
+            //     console.log("Event Date: " + response.data[0].datetime);
+            //   }
+            // } else {
+            //   console.log("\n" + artistFullName + " have no shows scheduled.");
+            // }
+          }
+        );
+      });
       break;
     case "Do what it says.":
       text = "Do this...";
