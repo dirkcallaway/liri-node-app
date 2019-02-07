@@ -44,8 +44,8 @@ var findConcert = function (artist, artistFullName) {
         for (var i = 0; i < response.data.length; i++) {
           console.log("---------------------------------".green);
           console.log("Venue Name: ".cyan + response.data[i].venue.name);
-          console.log("Venue Location: ".cyan + response.data[0].venue.city + ", " + (response.data[0].venue.region));
-          console.log("Event Date: ".cyan + moment(response.data[0].datetime).format("MM/DD/YYYY"));
+          console.log("Venue Location: ".cyan + response.data[i].venue.city + ", " + (response.data[0].venue.region));
+          console.log("Event Date: ".cyan + moment(response.data[i].datetime).format("MM/DD/YYYY"));
         }
       } else {
         console.log("\n" + artistFullName .bold.red + " have no shows scheduled.");
