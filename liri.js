@@ -52,7 +52,7 @@ inquirer.prompt([
       });
       break;
     case "What song is this?":
-      text = "Song...";
+      
       break;
       //Movie Search
     case "Find a movie.":
