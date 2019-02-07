@@ -6,7 +6,45 @@ var spotify = new Spotify(keys.spotify);
 var inquirer = require("inquirer");
 var axios = require("axios");
 var fs = require("fs");
-var moment = require("moment");
+
+var findMovie = function(){
+  inquirer.prompt([
+
+    {
+      type: "input",
+      name: "movie",
+      message: "What movie are you searching for?"
+    }
+
+  ]).then(function (movie) {
+    if (movie.movie == "") {
+      var movieTitle = "Mr.+Nobody";
+    } else {
+      movieFullName = movie.movie;
+      var movieName = movieFullName.split(" ");
+      var movieTitle = movieName.join("+");
+    }
+
+    var movieQuery = "http://www.omdbapi.com/?t=" + movieTitle + "&y=&plot=short&apikey=trilogy";
+    axios.get(movieQuery).then(
+      function (response) {
+
+        console.log("---------------------------------");
+        console.log("\n" + response.data.Title);
+        console.log("Released in: " + response.data.Year);
+        console.log("IMDB Rating: " + response.data.Ratings[0].Value);
+        console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+        console.log("Produced in: " + response.data.Country);
+        console.log("Plot Summary: " + response.data.Plot);
+        console.log("Actors: " + response.data.Actors);
+
+      }
+
+    );
+
+  });
+};
+
 
 inquirer.prompt([
 
@@ -44,7 +82,7 @@ inquirer.prompt([
                 console.log("---------------------------------");
                 console.log("Venue Name: " + response.data[i].venue.name);
                 console.log("Venue Location: " + response.data[0].venue.city + ", " + (response.data[0].venue.region));
-                console.log("Event Date: " + moment(response.data[0].datetime).format("MM/DD/YYYY"));
+                console.log("Event Date: " + response.data[0].datetime);
               }
             } else {
               console.log("\n" + artistFullName + " have no shows scheduled.");
@@ -86,42 +124,9 @@ inquirer.prompt([
       break;
       //Movie Search
     case "Find a movie.":
-      inquirer.prompt([
-
-        {
-          type: "input",
-          name: "movie",
-          message: "What movie are you searching for?"
-        }
-
-      ]).then(function (movie) {
-        if (movie.movie == "") {
-          var movieTitle = "Mr.+Nobody";
-        } else {
-          movieFullName = movie.movie;
-          var movieName = movieFullName.split(" ");
-          var movieTitle = movieName.join("+");
-        }
-
-        var movieQuery = "http://www.omdbapi.com/?t=" + movieTitle + "&y=&plot=short&apikey=trilogy";
-        axios.get(movieQuery).then(
-          function (response) {
-
-            console.log("---------------------------------");
-            console.log("\n" + response.data.Title);
-            console.log("Released in: " + response.data.Year);
-            console.log("IMDB Rating: " + response.data.Ratings[0].Value);
-            console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
-            console.log("Produced in: " + response.data.Country);
-            console.log("Plot Summary: " + response.data.Plot);
-            console.log("Actors: " + response.data.Actors);
-
-          }
-
-        );
-
-      });
+      findMovie();
       break;
+
     case "Do what it says.":
     fs.readFile("random.txt", "utf8", function(error, data) {
 
@@ -130,7 +135,7 @@ inquirer.prompt([
         return console.log(error);
       }
 
-      console.log(data);
+      console.log(data.split(","));
     
     });
       break;
