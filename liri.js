@@ -48,11 +48,39 @@ inquirer.prompt([
               console.log("\n" + artistFullName + " have no shows scheduled.");
             }
           }
+
         );
       });
       break;
     case "What song is this?":
-      
+      inquirer.prompt([
+
+        {
+          type: "input",
+          name: "song",
+          message: "What song are you listening to?"
+        }
+
+      ]).then(function (song) {
+
+      if (song.song == "") {
+        var songName = "The Sign ace of base";
+      } else {
+        songName = song.song;
+      }
+
+      spotify.search({ type: 'track', query: songName, limit: 1 }, function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        }
+        
+      console.log("\nArtist: " + data.tracks.items[0].artists[0].name);
+      console.log("Track: " + data.tracks.items[0].name);
+      console.log("Preview: " + data.tracks.items[0].preview_url);
+      console.log("Album: " + data.tracks.items[0].album.name);
+      });
+        
+      });
       break;
       //Movie Search
     case "Find a movie.":
@@ -65,7 +93,6 @@ inquirer.prompt([
         }
 
       ]).then(function (movie) {
-        console.log(movie);
         if (movie.movie == "") {
           var movieTitle = "Mr.+Nobody";
         } else {
@@ -75,7 +102,6 @@ inquirer.prompt([
         }
 
         var movieQuery = "http://www.omdbapi.com/?t=" + movieTitle + "&y=&plot=short&apikey=trilogy";
-        console.log(movieQuery);
         axios.get(movieQuery).then(
           function (response) {
 
@@ -89,7 +115,9 @@ inquirer.prompt([
             console.log("Actors: " + response.data.Actors);
 
           }
+
         );
+
       });
       break;
     case "Do what it says.":
