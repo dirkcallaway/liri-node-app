@@ -54,7 +54,7 @@ inquirer.prompt([
     case "What song is this?":
       text = "Song...";
       break;
-    //Movie Search
+      //Movie Search
     case "Find a movie.":
       inquirer.prompt([
 
@@ -66,30 +66,28 @@ inquirer.prompt([
 
       ]).then(function (movie) {
         console.log(movie);
-        if(movie.movie == ""){
+        if (movie.movie == "") {
           var movieTitle = "Mr.+Nobody";
         } else {
-        movieFullName = movie.movie;
-        var movieName = movieFullName.split(" ");
-        var movieTitle = movieName.join("+");
+          movieFullName = movie.movie;
+          var movieName = movieFullName.split(" ");
+          var movieTitle = movieName.join("+");
         }
 
         var movieQuery = "http://www.omdbapi.com/?t=" + movieTitle + "&y=&plot=short&apikey=trilogy";
         console.log(movieQuery);
         axios.get(movieQuery).then(
           function (response) {
-            console.log(response.data);
-            // if (response.data.length > 0) {
-            //   console.log("\n" + artistFullName + " are playing the following shows:");
-            //   for (var i = 0; i < response.data.length; i++) {
-            //     console.log("---------------------------------");
-            //     console.log("Venue Name: " + response.data[i].venue.name);
-            //     console.log("Venue Location: " + response.data[0].venue.city + ", " + (response.data[0].venue.region));
-            //     console.log("Event Date: " + response.data[0].datetime);
-            //   }
-            // } else {
-            //   console.log("\n" + artistFullName + " have no shows scheduled.");
-            // }
+
+            console.log("---------------------------------");
+            console.log("\n" + response.data.Title);
+            console.log("Released in: " + response.data.Year);
+            console.log("IMDB Rating: " + response.data.Ratings[0].Value);
+            console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+            console.log("Produced in: " + response.data.Country);
+            console.log("Plot Summary: " + response.data.Plot);
+            console.log("Actors: " + response.data.Actors);
+
           }
         );
       });
